@@ -14,7 +14,7 @@ def random_split_train_evaluate_test_from_extraction(extract: dict,
                                                      test_dir: str,
                                                      bucket_name: str,
                                                      s3_path: str,
-                                                     s3_client):
+                                                     s3_client: IS3ClientWrapper):
     if split_ratio_train + split_ratio_evaluate + split_ratio_test != 1:
         raise Exception("sum of ratio must be equal to 1")
 
@@ -46,6 +46,6 @@ def random_split_train_evaluate_test_from_extraction(extract: dict,
     download_files(extract_test, test_dir, bucket_name, s3_path, s3_client)
 
 
-def download_files(extract: dict, directory: str, bucket_name: str, s3_path: str, s3_client):
+def download_files(extract: dict, directory: str, bucket_name: str, s3_path: str, s3_client: IS3ClientWrapper):
     for key, value in extract.items():
         s3_client.download_file(bucket_name, s3_path + key, directory + "/" + value + "/" + key)
