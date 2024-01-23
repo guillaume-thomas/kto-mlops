@@ -2,6 +2,7 @@ import argparse
 import os
 import boto3
 
+from steps.s3_wrapper import S3ClientWrapper
 from steps.extraction import extraction_from_annotation_file
 from steps.split import random_split_train_evaluate_test_from_extraction
 from steps.test import Inference, test_model
@@ -24,11 +25,13 @@ epochs = args.epochs
 working_dir = args.working_dir
 
 if __name__ == "__main__":
-    boto3.client(
-        "s3",
-        endpoint_url=os.environ.get("MLFLOW_S3_ENDPOINT_URL"),
-        aws_access_key_id=os.environ.get("AWS_ACCESS_KEY_ID"),
-        aws_secret_access_key=os.environ.get("AWS_SECRET_ACCESS_KEY")
+    s3_client = S3ClientWrapper(
+        boto3.client(
+            "s3",
+            endpoint_url=os.environ.get("MLFLOW_S3_ENDPOINT_URL"),
+            aws_access_key_id=os.environ.get("AWS_ACCESS_KEY_ID"),
+            aws_secret_access_key=os.environ.get("AWS_SECRET_ACCESS_KEY")
+        )
     )
 
     bucket_name = "cats-dogs-other"
