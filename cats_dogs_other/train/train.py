@@ -26,7 +26,7 @@ epochs = args.epochs
 working_dir = args.working_dir
 
 if __name__ == "__main__":
-    mlflow.autolog()
+    mlflow.autolog(log_models=False)
     with mlflow.start_run():
         s3_client = S3ClientWrapper(
             boto3.client(

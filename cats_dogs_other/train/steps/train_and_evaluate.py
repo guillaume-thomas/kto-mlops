@@ -7,6 +7,7 @@ from keras.src.layers import Dropout, Flatten, Dense
 from keras.src.losses import SparseCategoricalCrossentropy
 from keras.src.preprocessing.image import ImageDataGenerator
 from matplotlib import pyplot
+import mlflow.keras
 
 
 def train_and_evaluate_model(train_dir: str,
@@ -61,6 +62,7 @@ def train_and_evaluate_model(train_dir: str,
     create_history_plots(history, plot_filepath)
 
     model.save(model_path)
+    mlflow.keras.log_model(model, "model", keras_model_kwargs={"save_format": "h5"})
 
 
 def define_model() -> Model:
@@ -96,4 +98,6 @@ def create_history_plots(history: History, plot_filepath: str):
     pyplot.plot(history.history["val_accuracy"], color="orange", label="test")
     # save plot to file
     pyplot.savefig(plot_filepath)
+    mlflow.log_artifact(plot_filepath)
+    
     pyplot.close()
