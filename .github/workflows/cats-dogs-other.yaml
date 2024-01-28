@@ -53,6 +53,15 @@ jobs:
           
           cd cats_dogs_other/train
           mlflow run . --experiment-name cats-dogs-other --backend kubernetes --backend-config kubernetes_config.json
-      - name: Asleep kto-mlflow and dailyclean
+
+          echo "Get last finished mlflow run"
+          cd ../../.github/workflows
+          export MLFLOW_RUN_ID=$(python -c 'import search_mlflow; print(search_mlflow.search_last_run_by_experiment_name("cats-dogs-other"))') 
+          echo "MLFLOW_RUN_ID=$MLFLOW_RUN_ID" >> "$GITHUB_ENV"
+      - name: Build and push API Docker image
+        run: |
+          docker build -t quay.io/gthomas59800/kto/mlops_python_2023_2024:latest --build-arg MLFLOW_RUN_ID=$MLFLOW_RUN_ID --build-arg MLFLOW_TRACKING_URI=${{vars.MLFLOW_TRACKING_URI}} --build-arg MLFLOW_S3_ENDPOINT_URL=${{vars.MLFLOW_S3_ENDPOINT_URL}} --build-arg AWS_ACCESS_KEY_ID=${{vars.AWS_ACCESS_KEY_ID}} --build-arg AWS_SECRET_ACCESS_KEY=${{secrets.AWS_SECRET_ACCESS_KEY}} .
+          docker push quay.io/gthomas59800/kto/mlops_python_2023_2024:latest
+      - name: Asleep kto-mlflow with dailyclean
         run: |
           curl -X POST ${{vars.DAILYCLEAN_ROUTE}}/pods/stop
