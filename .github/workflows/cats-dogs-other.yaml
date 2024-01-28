@@ -19,7 +19,12 @@ jobs:
           ./init_packages.sh
           pip install -r ./cats_dogs_other/requirements.txt
           pip install -r ./cats_dogs_other/label/requirements.txt
+          pip install -r ./cats_dogs_other/api/requirements.txt
+          # For tests purposes, we copy an existing .keras file in the folder api/resources
+          # We will delete it just after the tests
+          cp ./cats_dogs_other/train/steps/tests/test/input/model/final_model.keras ./cats_dogs_other/api/resources/final_model.keras 
           python -m unittest
+          rm ./cats_dogs_other/api/resources/final_model.keras
       - name: Install mlflow
         run: |
           pip install mlflow[extras]
