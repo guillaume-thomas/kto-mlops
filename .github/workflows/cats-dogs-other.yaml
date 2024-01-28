@@ -62,6 +62,18 @@ jobs:
         run: |
           docker build -t quay.io/gthomas59800/kto/mlops_python_2023_2024:latest --build-arg MLFLOW_RUN_ID=$MLFLOW_RUN_ID --build-arg MLFLOW_TRACKING_URI=${{vars.MLFLOW_TRACKING_URI}} --build-arg MLFLOW_S3_ENDPOINT_URL=${{vars.MLFLOW_S3_ENDPOINT_URL}} --build-arg AWS_ACCESS_KEY_ID=${{vars.AWS_ACCESS_KEY_ID}} --build-arg AWS_SECRET_ACCESS_KEY=${{secrets.AWS_SECRET_ACCESS_KEY}} .
           docker push quay.io/gthomas59800/kto/mlops_python_2023_2024:latest
+      - name: Deploy the API on development environment
+        run: |
+          # download oc
+          mkdir oc
+          cd oc
+          curl https://mirror.openshift.com/pub/openshift-v4/clients/oc/latest/linux/oc.tar.gz --output oc.tar.gz
+          tar xvf oc.tar.gz
+          cd ..
+          PATH=$PATH:$PWD/oc
+          cd deploy
+          oc login --token=${{secrets.OPENSHIFT_TOKEN}} --server=${{vars.OPENSHIFT_SERVER}}
+          oc apply -f mlops-api.yaml
       - name: Asleep kto-mlflow with dailyclean
         run: |
           curl -X POST ${{vars.DAILYCLEAN_ROUTE}}/pods/stop
