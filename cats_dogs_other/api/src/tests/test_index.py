@@ -3,6 +3,13 @@ import unittest
 from fastapi.testclient import TestClient
 from cats_dogs_other.api.src import index
 
+def skip_oauth():
+    return {}
+
+
+index.skip_oidc = True
+index.app.dependency_overrides[index.oauth2_scheme] = skip_oauth
+
 client = TestClient(index.app)
 
 
