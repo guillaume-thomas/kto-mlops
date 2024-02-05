@@ -25,21 +25,26 @@ nombre_prenoms_sup_7 = compter_prenoms(prenoms)
 
 
 # orienté objet
-def names(prenoms):
-    more_than_seven = 0
-    for prenom in prenoms:
-        if len(prenom) > 7:
-            more_than_seven += 1
-            print("Prenom supérieur à 7 : " + prenom)
-        else:
-            print("Prenom inférieur ou égal à 7 : " + prenom)
-    return more_than_seven
+import unittest
+
+def names(prenoms: list[str]) -> int:
+    """
+    Compte le nombre de prénoms ayant plus de 7 lettres dans une liste donnée.
+
+    Args:
+    prenoms (list[str]): Une liste de prénoms.
+
+    Returns:
+    int: Le nombre de prénoms ayant plus de 7 lettres.
+    """
+    return sum(len(prenom) > 7 for prenom in prenoms)
 
 class TestNamesMethod(unittest.TestCase):
-     def test_names(self):
+    def test_names(self):
         prenoms = ["Guillaume", "Gilles", "Juliette", "Antoine", "François", "Cassandre"]
-        more_than_seven = names(prenoms=prenoms)
-        self.assertEqual(more_than_seven, 4)
+        more_than_seven = names(prenoms)
+        self.assertEqual(more_than_seven, 3)
 
 if __name__ == '__main__':
     unittest.main()
+
