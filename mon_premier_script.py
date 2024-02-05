@@ -48,3 +48,9 @@ class TestNamesMethod(unittest.TestCase):
 if __name__ == '__main__':
     unittest.main()
 
+
+# Modifications apportées au code : 
+    # import de la librairie unittest
+    # Typage des arguments de la fonction
+    # Utilisation d'un liste compréhension pour enlever le code conditionnelle inutile et améliorer la lisibilité
+    # ... autres modifications mineures
