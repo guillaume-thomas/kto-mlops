@@ -1,0 +1,17 @@
+name: cats-dogs-other
+
+docker_env:
+  image: local/cats-dogs-other-train
+
+entry_points:
+  main:
+    parameters:
+        split_ratio_train: {type: float, default: 0.8}
+        split_ratio_evaluate: {type: float, default: 0.1}
+        split_ratio_test: {type: float, default: 0.1}
+        batch_size: {type: int, default: 64}
+        epochs: {type: int, default: 4}
+        working_dir: {type: str, default: ./cats_dogs_other/train/dist}
+        model_filename: {type: str, default: final_model.keras}
+        model_plot_filename: {type: str, default: model_plot.png}
+    command: "python ./cats_dogs_other/train/train.py --split_ratio_train={split_ratio_train} --split_ratio_evaluate={split_ratio_evaluate} --split_ratio_test={split_ratio_test} --batch_size={batch_size} --epochs={epochs} --working_dir={working_dir}"

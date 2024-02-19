@@ -1,6 +1,8 @@
 import random
 from pathlib import Path
 
+import mlflow.keras
+
 from .s3_wrapper import IS3ClientWrapper
 
 
@@ -44,6 +46,10 @@ def random_split_train_evaluate_test_from_extraction(extract: dict,
     download_files(extract_train, train_dir, bucket_name, s3_path, s3_client)
     download_files(extract_evaluate, evaluate_dir, bucket_name, s3_path, s3_client)
     download_files(extract_test, test_dir, bucket_name, s3_path, s3_client)
+
+    mlflow.log_dict(extract_train, "annotations/split_train.json")
+    mlflow.log_dict(extract_evaluate, "annotations/split_evaluate.json")
+    mlflow.log_dict(extract_test, "annotations/split_test.json")
 
 
 def download_files(extract: dict, directory: str, bucket_name: str, s3_path: str, s3_client: IS3ClientWrapper):
