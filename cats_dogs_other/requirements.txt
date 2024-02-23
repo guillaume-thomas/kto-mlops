@@ -1,0 +1,5 @@
+boto3
+tensorflow 
+matplotlib 
+scipy
+mlflow
