@@ -1,0 +1,13 @@
+name: Cats and dogs CI/CD
+on:
+  push:
+    branches:
+      - step**
+
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Première step d'intro !!
+        run: |
+          echo "COUCOU !"
