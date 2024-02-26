@@ -2,7 +2,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: "{replaced with MLflow Project name}"
-  namespace: gthomas59800-dev
+  namespace: kto-catho-dev
 spec:
   ttlSecondsAfterFinished: 100
   backoffLimit: 0
