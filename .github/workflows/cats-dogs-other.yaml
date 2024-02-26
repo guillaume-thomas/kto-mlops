@@ -2,7 +2,7 @@ name: Cats and dogs CI/CD
 on: 
   push:
     branches:
-      - step**
+      - remi-fraszczak
 
 jobs:
   train:
