@@ -3,3 +3,4 @@ tensorflow
 matplotlib 
 scipy
 mlflow
+./cats_dogs_other/train/packages/kto_keras_inference-0.0.1-py3-none-any.whl
