@@ -1,8 +1,8 @@
 name: Cats and dogs CI/CD
-on:
+on: 
   push:
     branches:
-      - remifraszczak/step04
+      - step**
 
 jobs:
   train:
@@ -20,3 +20,34 @@ jobs:
           pip install -r ./cats_dogs_other/requirements.txt
           pip install -r ./cats_dogs_other/label/requirements.txt
           python -m unittest
+      - name: Install mlflow
+        run: |
+          pip install mlflow[extras]
+      - name: Configure Docker (Quay) & Kubectl (Openshift Sandbox)
+        run: |
+          docker login -u="${{vars.QUAY_ROBOT_USERNAME}}" -p="${{secrets.QUAY_ROBOT_TOKEN}}" quay.io
+          kubectl config set-cluster openshift-cluster --server=${{vars.OPENSHIFT_SERVER}}
+          kubectl config set-credentials openshift-credentials --token=${{secrets.OPENSHIFT_TOKEN}}
+          kubectl config set-context openshift-context --cluster=openshift-cluster --user=openshift-credentials --namespace=${{vars.OPENSHIFT_USERNAME}}-dev
+          kubectl config use openshift-context
+      - name: Wake up dailyclean and kto-mlflow
+        run: |
+          kubectl scale --replicas=1 deployment/dailyclean-api
+          sleep 30
+          curl -X POST ${{vars.DAILYCLEAN_ROUTE}}/pods/start
+      - name: Build training image
+        run: |
+          docker build -f cats_dogs_other/train/Dockerfile -t quay.io/gthomas59800/kto/train/cats-dogs-other-2023-2024:latest --build-arg MLFLOW_S3_ENDPOINT_URL=${{vars.MLFLOW_S3_ENDPOINT_URL}} --build-arg AWS_ACCESS_KEY_ID=${{vars.AWS_ACCESS_KEY_ID}} --build-arg AWS_SECRET_ACCESS_KEY=${{secrets.AWS_SECRET_ACCESS_KEY}} .
+      - name: Launch mlflow training in Openshift
+        run: |
+          export KUBE_MLFLOW_TRACKING_URI="${{vars.MLFLOW_TRACKING_URI}}"
+          export MLFLOW_TRACKING_URI="${{vars.MLFLOW_TRACKING_URI}}"
+          export MLFLOW_S3_ENDPOINT_URL="${{vars.MLFLOW_S3_ENDPOINT_URL}}"
+          export AWS_ACCESS_KEY_ID="${{vars.AWS_ACCESS_KEY_ID}}" 
+          export AWS_SECRET_ACCESS_KEY="${{secrets.AWS_SECRET_ACCESS_KEY}}"
+          
+          cd cats_dogs_other/train
+          mlflow run . --experiment-name cats-dogs-other --backend kubernetes --backend-config kubernetes_config.json
+      - name: Asleep kto-mlflow with dailyclean
+        run: |
+          curl -X POST ${{vars.DAILYCLEAN_ROUTE}}/pods/stop
