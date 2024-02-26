@@ -1,5 +1,5 @@
 name: Cats and dogs CI/CD
-on: 
+on:
   push:
     branches:
       - remi-fraszczak
