@@ -1,0 +1,57 @@
+{
+  "annotations": [
+    {
+      "fileName": "a_page0_index0.png",
+      "annotation": {
+        "label": "other"
+      }
+    },{
+      "fileName": "b_page2_index0.png",
+      "annotation": {
+        "label": "other"
+      }
+    },
+    {
+      "fileName": "b_page1_index0.png",
+      "annotation": {
+        "label": "other"
+      }
+    },
+    {
+      "fileName": "b_page1_index0.png",
+      "annotation": {
+        "label": "cat"
+      }
+    },
+    {
+      "fileName": "b_page2_index0.png",
+      "annotation": {
+        "label": "cat"
+      }
+    },
+    {
+      "fileName": "b_page2_index0.png",
+      "annotation": {
+        "label": "dog"
+      }
+    },
+    {
+      "fileName": "b_page3_index0.png",
+      "annotation": {
+        "label": "cat"
+      }
+    },
+    {
+      "fileName": "b_page4_index0.png",
+      "annotation": {
+        "label": "dog"
+      }
+    },
+    {
+      "fileName": "c_page4_index0.png",
+      "annotation": {
+        "label": "dog"
+      }
+    }
+  ]
+}
