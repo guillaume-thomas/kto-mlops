@@ -7,3 +7,8 @@ for prenom in prenoms:
     else:
         print(prenom + " est un prénom avec un nombre de lettres inférieur ou égal à 7")
 print("Nombre de prénoms dont le nombre de lettres est supérieur à 7 : " + str(more_than_seven))
+
+def saluer(nom: str) -> str:
+    return "Bonjour " + nom
+
+print(saluer("Alice"))  # Affiche : Bonjour Alice
