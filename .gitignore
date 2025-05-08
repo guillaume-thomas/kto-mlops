@@ -9,3 +9,4 @@
 **/.coverage/
 **/ecotag/
 *.ipynb
+!notebooks/train_model.ipynb
